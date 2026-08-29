@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Task:
@@ -8,3 +8,4 @@ class Task:
     deadline: Optional[date]
     importance: int
     completed: bool = False
+    created_at: datetime = field(default_factory = datetime.now)
