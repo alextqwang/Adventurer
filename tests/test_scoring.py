@@ -2,7 +2,6 @@ from adventurer.scoring import urgency, score, sort_tasks
 from datetime import date, timedelta
 from adventurer.task import Task
 
-
 def test_urgency_no_deadline():
     assert urgency(None) == 0
 
