@@ -32,4 +32,8 @@ def score(task: Task) -> float:
     task_urgency = urgency(task.deadline)
     return task.importance * (0.5 + task_urgency)
 
+def sort_tasks(tasks: list[Task]) -> list[Task]:
+    return sorted(tasks, key = lambda t: (-score(t),
+    (t.deadline is None, date.max if t.deadline is None else t.deadline), t.created_at))
+
 
