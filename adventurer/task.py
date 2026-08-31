@@ -9,3 +9,4 @@ class Task:
     importance: int
     completed: bool = False
     created_at: datetime = field(default_factory = datetime.now)
+    snoozed_until: Optional[date] = None

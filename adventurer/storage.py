@@ -8,6 +8,7 @@ def task_to_dict(task: Task) -> dict:
     task_dict = asdict(task)
     task_dict['deadline'] = task.deadline.isoformat() if task.deadline is not None else None
     task_dict['created_at'] = task.created_at.isoformat()
+    task_dict['snoozed_until'] = task.snoozed_until.isoformat() if task.snoozed_until is not None else None
     return task_dict
 
 def dict_to_task(d: dict) -> Task:
@@ -19,7 +20,9 @@ def dict_to_task(d: dict) -> Task:
     completed = d.get("completed", False)
     created_at_raw: str | None = d.get("created_at")
     created_at = datetime.fromisoformat(created_at_raw) if created_at_raw is not None else datetime.now()
-    return Task(text, deadline, importance, completed, created_at)
+    snoozed_until_raw: str | None = d.get("snoozed_until")
+    snoozed_until = date.fromisoformat(snoozed_until_raw) if snoozed_until_raw is not None else None
+    return Task(text, deadline, importance, completed, created_at, snoozed_until)
 
 def save(tasks: list[Task], path: str | Path) -> None:
     readable_tasks = [task_to_dict(task) for task in tasks]
