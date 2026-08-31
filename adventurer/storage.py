@@ -13,10 +13,12 @@ def task_to_dict(task: Task) -> dict:
 def dict_to_task(d: dict) -> Task:
     """Precondition: d is already formatted"""
     text = d["text"]
-    deadline = date.fromisoformat(d["deadline"]) if d["deadline"] is not None else None
-    importance = d["importance"]
-    completed = d["completed"]
-    created_at = datetime.fromisoformat(d["created_at"])
+    deadline_raw: str | None = d.get("deadline")
+    deadline = date.fromisoformat(deadline_raw) if deadline_raw is not None else None
+    importance = d.get("importance", 1)
+    completed = d.get("completed", False)
+    created_at_raw: str | None = d.get("created_at")
+    created_at = datetime.fromisoformat(created_at_raw) if created_at_raw is not None else datetime.now()
     return Task(text, deadline, importance, completed, created_at)
 
 def save(tasks: list[Task], path: str | Path) -> None:
