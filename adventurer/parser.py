@@ -2,6 +2,7 @@ from datetime import date
 from adventurer.task import Task
 import ollama
 import json
+from adventurer.storage import dict_to_task, task_to_dict, save, load
 
 SYSTEM_PROMPT = f"""Extract every task from the user's message. The user may mention several tasks in one rambling message - return one object for each.
 
@@ -28,5 +29,14 @@ def parse(user_input: str) -> list[Task]:
         format = "json"
     )
 
-    parsed_dicts = json.loads(response.message.content)["tasks"]
-    
+    return _response_to_tasks(response.message.content)
+
+def _response_to_tasks(content: str) -> list[Task]:
+    parsed_dicts = json.loads(content)["tasks"]
+    list_of_tasks = []
+    for d in parsed_dicts:
+        if d["text"]:
+            d["text"] = d["text"][0].upper() + d["text"][1:]
+        task = dict_to_task(d)
+        list_of_tasks.append(task)
+    return list_of_tasks
